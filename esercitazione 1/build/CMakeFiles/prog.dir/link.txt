@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/prog.dir/intarg.cpp.o -o prog
