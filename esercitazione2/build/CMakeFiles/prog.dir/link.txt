@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wshadow -Werror=vla -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/prog.dir/posizioneoggetti.cpp.o -o prog

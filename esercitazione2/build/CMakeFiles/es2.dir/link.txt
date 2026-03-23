@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wshadow -Werror=vla -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/es2.dir/primialgoritmi.cpp.o -o es2
