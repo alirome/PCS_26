@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/esercitazione3.dir/main.cpp.o -o esercitazione3
