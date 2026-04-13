@@ -1,0 +1,7 @@
+/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione4/build/CMakeFiles/measure_sorts.dir
+/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione4/build/CMakeFiles/test_bubblesort.dir
+/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione4/build/CMakeFiles/test_insertionsort.dir
+/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione4/build/CMakeFiles/test_selectionsort.dir
+/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione4/build/CMakeFiles/test.dir
+/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione4/build/CMakeFiles/edit_cache.dir
+/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione4/build/CMakeFiles/rebuild_cache.dir
