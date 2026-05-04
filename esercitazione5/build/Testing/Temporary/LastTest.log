@@ -1,0 +1,93 @@
+Start testing: May 04 09:39 CEST
+----------------------------------------------------------
+1/6 Testing: bubblesort
+1/6 Test: bubblesort
+Command: "/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione5/build/test_bubblesort"
+Directory: /Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione5/build
+"bubblesort" start time: May 04 09:39 CEST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   1.13 sec
+----------------------------------------------------------
+Test Passed.
+"bubblesort" end time: May 04 09:39 CEST
+"bubblesort" time elapsed: 00:00:01
+----------------------------------------------------------
+
+2/6 Testing: insertionsort
+2/6 Test: insertionsort
+Command: "/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione5/build/test_insertionsort"
+Directory: /Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione5/build
+"insertionsort" start time: May 04 09:39 CEST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.63 sec
+----------------------------------------------------------
+Test Passed.
+"insertionsort" end time: May 04 09:39 CEST
+"insertionsort" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/6 Testing: selectionsort
+3/6 Test: selectionsort
+Command: "/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione5/build/test_selectionsort"
+Directory: /Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione5/build
+"selectionsort" start time: May 04 09:39 CEST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.78 sec
+----------------------------------------------------------
+Test Passed.
+"selectionsort" end time: May 04 09:39 CEST
+"selectionsort" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/6 Testing: mergesort
+4/6 Test: mergesort
+Command: "/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione5/build/test_mergesort"
+Directory: /Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione5/build
+"mergesort" start time: May 04 09:39 CEST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.59 sec
+----------------------------------------------------------
+Test Passed.
+"mergesort" end time: May 04 09:39 CEST
+"mergesort" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/6 Testing: quicksort
+5/6 Test: quicksort
+Command: "/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione5/build/test_quicksort"
+Directory: /Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione5/build
+"quicksort" start time: May 04 09:39 CEST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"quicksort" end time: May 04 09:39 CEST
+"quicksort" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/6 Testing: quickibrido
+6/6 Test: quickibrido
+Command: "/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione5/build/test_quickibrido"
+Directory: /Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione5/build
+"quickibrido" start time: May 04 09:39 CEST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.53 sec
+----------------------------------------------------------
+Test Passed.
+"quickibrido" end time: May 04 09:39 CEST
+"quickibrido" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: May 04 09:39 CEST

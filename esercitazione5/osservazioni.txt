@@ -1,0 +1,6 @@
+//osservazioni
+
+I metodi quadratici (in particolare il metodo di insertion sort) risultano più veloci di quelli logaritmici (quicksort) per vettori con grandezza al di sotto di una certa soglia, che vale circa 30.
+Poiché stiamo generando vettori casuali la differenza tra i tempi non è sempre coerente con le aspettative, ma in generale possiamo dire che, per vettori sufficientemente grandi, il quick sort è il metodo più veloce ( dopo al std::sort() )
+
+Notiamo come per dimensioni piccole il quicksort/insertion modificato è più veloce dei metodi logaritmici

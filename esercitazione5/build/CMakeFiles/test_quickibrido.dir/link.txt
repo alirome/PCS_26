@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wshadow -Werror=vla -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/test_quickibrido.dir/test_quickibrido.cpp.o -o test_quickibrido
