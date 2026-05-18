@@ -1,0 +1,3 @@
+/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione7/build/CMakeFiles/main.dir
+/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione7/build/CMakeFiles/edit_cache.dir
+/Users/IT058589/Desktop/alice/uni/3 anno/pcs/Docker/Data/PCS_26/esercitazione7/build/CMakeFiles/rebuild_cache.dir
