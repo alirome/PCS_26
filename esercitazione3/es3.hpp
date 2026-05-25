@@ -12,7 +12,8 @@ class rational{
     I den_;
     bool Inf;
     bool NaN;
-
+	
+	// funzione per semplificare la frazione ai minimi termini
     void semplifica(){
         if (NaN || Inf){
             return;
@@ -50,8 +51,9 @@ public:
     bool isInf() const {return Inf;}
     bool isNaN() const {return NaN;}
 
+	//somma
     rational& operator+= (const rational& other){
-        if (this->isNaN() ||other.isNaN()){ // forse ci vuole NaN
+        if (this->isNaN() ||other.isNaN()){ 
             num_=0; 
             den_=0;
             Inf= false;
@@ -66,7 +68,7 @@ public:
             NaN= false;
             return *this;
         }
-        // calcolo somma
+
         num_= (num_ * other.den_)+ (other.num_ * den_);
         den_= (den_ * other.den_);
         semplifica();
@@ -78,7 +80,8 @@ public:
         ret += other;
         return ret;
     }
-
+	
+	//differenza
     rational& operator-= (const rational& other) {
         if (this->isNaN() ||other.isNaN()){
             num_=0; 
@@ -107,7 +110,8 @@ public:
         ret -= other;
         return ret;
     }
-
+	
+	//prodotto
     rational& operator*= (const rational& other) {
         if (this->isNaN() ||other.isNaN()){
             num_=0; 
@@ -138,6 +142,7 @@ public:
         return ret;
     }
 
+	//divisione
     rational& operator/= (const rational& other) {
         if (this->isNaN() ||other.isNaN()){
             num_=0; 
