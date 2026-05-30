@@ -63,8 +63,8 @@ class unidirected_graph
 {
 	
 private:
-	std::set<unidirected_edge<T>> archi;  //creo un set con gli archi (chiavi), infatti il tipo degli elementi del set è unidirected_edge
-    std::map<T, std::set<T>> la;   //creo una lista di adiacenza con una mappa che ha come chiavi i nodi, per ognuno dei quali è associata una lista di nodi adiacenti
+	std::set<unidirected_edge<T> > archi;  //creo un set con gli archi (chiavi), infatti il tipo degli elementi del set è unidirected_edge
+    std::map<T, std::set<T> > la;   //creo una lista di adiacenza con una mappa che ha come chiavi i nodi, per ognuno dei quali è associata una lista di nodi adiacenti
                                      //la chiave (nodo) si trova con pair.first, i nodi adiacenti con pair.second(che rende un set con all vicini) 
 public:
     unidirected_graph() = default;
@@ -101,7 +101,7 @@ public:
         return W.at(unidirected_edge<T>(u, v));
     }
 	
-	std::set<unidirected_edge<T>> all_edges() const   //all edges rende tutti gli archi sottoforma di set di archi
+	std::set<unidirected_edge<T> > all_edges() const   //all edges rende tutti gli archi sottoforma di set di archi
 	{
         return archi; 
     }
