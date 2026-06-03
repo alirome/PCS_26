@@ -5,10 +5,11 @@
 #include <map>
 #include <iterator>
 #include <algorithm>
+#include "contenitori.hpp"
 #include "graphs.hpp"
 
 template <typename T, typename contenitore>
-unidirected_graph<T> graph_visit(const unidirected_graph<T> g, const T& nodo_s, contenitore& c)  //prendo un grafo, il nodo sorgente e un contenitore(pila o coda, a seconda che voglia usare BFS o DFS)
+unidirected_graph<T> graph_visit2(const unidirected_graph<T> g, const T& nodo_s, contenitore& c)  //prendo un grafo, il nodo sorgente e un contenitore(pila o coda, a seconda che voglia usare BFS o DFS)
 {
 	unidirected_graph<T> albero;
 	std::set<T> visitati;   //sostituisce il ciclo for che controlla azzera tutte le posizioni
@@ -64,7 +65,7 @@ template <typename T>
 std::vector<struttura_cicli<T> > cicli_fondamentali_dfs(const unidirected_graph<T>& grafo, const T& nodo_sorgente)
 {
     lifo<T> stack;
-    unidirected_graph<T> A = graph_visit(grafo, nodo_sorgente, stack);  //albero dfs usando lo stack
+    unidirected_graph<T> A = graph_visit2(grafo, nodo_sorgente, stack);  //albero dfs usando lo stack
     unidirected_graph<T> coalbero = grafo - A;    // coalbero C=G\T  (archi in G ma non in T)
     std::vector<struttura_cicli<T>> cicli;        
 
@@ -85,7 +86,8 @@ std::vector<struttura_cicli<T> > cicli_fondamentali_dfs(const unidirected_graph<
                 ciclo.edges.insert(unidirected_edge<T>(ciclo.nodes[i], ciclo.nodes[i+1]));   //set degli archi nel ciclo
             }
 			
-            ciclo.edges.insert(unidirected_edge<T>(u, v));       // Arco di chiusura dal coalbero (v,u)
+            ciclo.edges.insert(unidirected_edge<T>(u,v));       // Arco di chiusura dal coalbero (v,u)
+            ciclo.nodes.push_back(u);
             cicli.push_back(ciclo);
         }
     }
