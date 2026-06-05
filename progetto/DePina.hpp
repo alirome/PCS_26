@@ -137,11 +137,11 @@ std::vector<std::vector<bool>> de_pina(const unidirected_graph<int>& G, int nodo
     
     // 2. INIZIALIZZAZIONE DEI VETTORI S_i
     std::vector<std::vector<bool>> S(k, std::vector<bool>(m, false));
-    int i = 0;
+    int l = 0;
     for (const auto& arco_coalbero : C.all_edges()) {
         int idx = G.edge_number(arco_coalbero);
-        S[i][idx] = true; // Ogni S_i ha un solo '1' in corrispondenza del suo arco nel coalbero
-        i++;
+        S[l][idx] = true; // Ogni S_l ha un solo '1' in corrispondenza del suo arco nel coalbero
+        l++;
     }
 
     // 3. CICLO ALGEBRICO DI DE PINA (Esattamente l'Algorithm 2 delle note)
