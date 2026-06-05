@@ -15,8 +15,7 @@ int main(){
     unidirected_edge<int> arco_sorgente= G.edge_at(0);
     std::vector<struttura_cicli<int>> cicli = cicli_fondamentali_dfs(G, arco_sorgente.from());
     
-    int n= 0;
-
+    //stampa cicli
     for (size_t i = 0; i < cicli.size(); ++i) {
         std::cout << "\nCiclo " << i << ":" << std::endl;
         std::cout << "Nodi nel path: ";
@@ -35,23 +34,35 @@ int main(){
         }
         std::cout<< "\n";
         std::cout << std::endl;
-        n= i;
     }
 
-    int m=0;
-    //for (const auto& arco : G.all_edges()){
-        //if (arco.tipo == 'R'){
-            //m=m+1;
-        //}
-    //}
+    //creare vettore resistori e struttura componenti
+    std::vector<struttura> resistenze;
+    for (const auto& coppia : C.componenti) {
+        if (coppia.second.type.front() == 'R') {   //confronta il primo carattere
+            resistenze.push_back(coppia.second);
+        }
+    }
+    std::vector<struttura> generatori;
+    for (const auto& pair : C.componenti) {
+        if (pair.second.type.front() == 'V') {
+            generatori.push_back(pair.second);
+        }
+    }
 
     //creo matrice di incidenza e resistenza
-    //n= numero di cicli //parte da 0
+    //n= numero di cicli 
     //m= numero di resitori
-    Eigen::MatrixXd R; //resistenza
-    Eigen::MatrixXd B; //incidenza
+    Eigen::MatrixXd R= costruzione_R (resistenze); //resistenza mxm
+    Eigen::MatrixXd B= costruzione_B (resistenze , cicli ); //incidenza mxn
+    Eigen::VectorXd v = costruzione_v (generatori, cicli);
+    
 
-
+    std::cout << "Numero di resistenze trovate, m= " << resistenze.size() << "\n";
+    std::cout << "Numero di maglie (cicli) trovate, n=" << cicli.size() << "\n";
+    std::cout << "Matrice R (Diagonale delle Resistenze):\n" << R << "\n\n";
+    std::cout << "Matrice B (Incidenza Maglie-Resistenze):\n" << B << "\n\n";
+    std::cout << "Vettore dei termini noti (v):\n" << v << "\n\n";
 
     return 0;
 }
