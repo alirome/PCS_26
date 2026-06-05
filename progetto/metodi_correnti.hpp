@@ -20,17 +20,23 @@ struct struttura {
     int nodo2;
 };
 
-unidirected_graph<int> lettura(const std::string& nome){
+struct circuito{
+    unidirected_graph<int> G;
+    std::map<unidirected_edge<int>, struttura> componenti;
+};
+
+circuito lettura(const std::string& nome){
     unidirected_graph<int> G;
     std::map<unidirected_edge<int>, struttura> componenti;
     std::ifstream ifs(nome);
-    
+    circuito c;
+
     if ( ifs.is_open() ){
-        while ( !ifs.eof() ){
-            std::string tipo;
-            double peso;
-            int nodo1, nodo2;
-            ifs >> tipo>> peso >> nodo1 >> nodo2;
+        std::string tipo;
+        double peso;
+        int nodo1, nodo2;
+        
+        while ( ifs >> tipo>> peso >> nodo1 >> nodo2 ){
 
             //gestisco gli errori
             if (nodo1==nodo2){
@@ -40,27 +46,27 @@ unidirected_graph<int> lettura(const std::string& nome){
 
 
             unidirected_edge<int> nuovo_arco(nodo1, nodo2);
-            auto archi_attuali =G.all_edges();
+            auto archi_attuali =c.G.all_edges();
 
             if (archi_attuali.find(nuovo_arco) != archi_attuali.end()){
                 std::cerr<< "ERRORE: l'arco esiste già" << std::endl ; //controllare 
                 continue;
             }
                 
-            G.add_edge(nodo1, nodo2, peso); //il peso è double
+            c.G.add_edge(nodo1, nodo2, peso); //il peso è double
 
             if (nuovo_arco.from()== nodo1) { //se il nodo1 è il minore prendo il segno positivo
-                componenti[nuovo_arco] = struttura{ tipo, peso, +1, nodo1, nodo2};
+                c.componenti[nuovo_arco] = struttura{ tipo, peso, +1, nodo1, nodo2};
             } 
             else {
-                componenti[nuovo_arco] = struttura{ tipo, peso, -1, nodo1, nodo2 };
+                c.componenti[nuovo_arco] = struttura{ tipo, peso, -1, nodo1, nodo2 };
             }
         }
     }
     else {
         std::cerr << "ERRORE: il file non è stato aperto correttamente"<< std::endl ; 
-        return G;
+        return c;
     }
-    return G;
+    return c;
 }
 

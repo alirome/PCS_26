@@ -5,9 +5,9 @@
 #include "graphs.hpp"
 
 
-
 int main(){
-    unidirected_graph<int> G=lettura("netlist.txt");
+    circuito C=lettura("../netlist.txt"); //la netlist non si trova in build/
+    unidirected_graph<int>& G=C.G;
     for (const auto& arco : G.all_edges()){
         std::cout<< arco.from()<< "---" << arco.to() << "\n";
     }
@@ -40,7 +40,7 @@ int main(){
 
     int m=0;
     //for (const auto& arco : G.all_edges()){
-        //if (arco[tipo]= 'R'){
+        //if (arco.tipo == 'R'){
             //m=m+1;
         //}
     //}
