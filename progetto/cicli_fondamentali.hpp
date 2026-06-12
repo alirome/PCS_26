@@ -80,14 +80,18 @@ std::vector<struttura_cicli<T> > cicli_fondamentali_dfs(const unidirected_graph<
         {
             struttura_cicli<T> ciclo;
             ciclo.nodes = path;   // path contiene (u,v)
+            ciclo.nodes.push_back(u);
+            auto it = std::min_element(ciclo.nodes.begin(), ciclo.nodes.end() - 1); // -1 per escludere l'ultimo nodo (che è uguale al primo)
+            std::rotate(ciclo.nodes.begin(), it, ciclo.nodes.end() - 1);
+            ciclo.nodes.back() = ciclo.nodes.front();  // aggiorna il nodo di chiusura
 
             for (size_t i = 0; i + 1 < ciclo.nodes.size(); ++i)
             {
                 ciclo.edges.insert(unidirected_edge<T>(ciclo.nodes[i], ciclo.nodes[i+1]));   //set degli archi nel ciclo
             }
 			
-            ciclo.edges.insert(unidirected_edge<T>(u,v));       // Arco di chiusura dal coalbero (v,u)
-            ciclo.nodes.push_back(u);
+            //ciclo.edges.insert(unidirected_edge<T>(u,v));       // Arco di chiusura dal coalbero (v,u)
+            
             cicli.push_back(ciclo);
         }
     }

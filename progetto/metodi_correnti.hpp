@@ -7,12 +7,13 @@
 #include <Eigen/SVD>
 #include "graphs.hpp"
 #include "cicli_fondamentali.hpp"
-#include "DePina.hpp"
+#include "depinanuovo.hpp"
 
 //usiamo add_edge per creare gli archi delle resistenze e generatori come mappa di vettore (nodo,nodo) e peso (valore della resistenza/del generatore)
 //POSSIBILI DOMANDE ALL'ESAME?
 //perchè usiamo una mappa? cosa comporta? c'è un modo più semplice? 
-//aggiungiamo un campo agli archi con un label R/V
+//coontrollare i segni
+//i cicli sono in senso antiorario
 
 struct struttura {
     std::string type;    // 'R' o 'V'
@@ -88,7 +89,7 @@ Eigen::MatrixXd costruzione_B(const std::vector<struttura>& resistenze, const st
     int n= cicli.size();
     Eigen::MatrixXd B = Eigen::MatrixXd::Zero(m, n);
 
-    for (int z = 0; z < n; z++) {
+    for (size_t z = 0; z < n; z++) {
         
         const std::vector<int>& percorso = cicli[z].nodes;
         
@@ -97,12 +98,12 @@ Eigen::MatrixXd costruzione_B(const std::vector<struttura>& resistenze, const st
             int nodo_arrivo = percorso[k + 1];
             
             for (int r = 0; r < m; r++) {
-                
-                if (nodo_partenza == resistenze[r].nodo1 && nodo_arrivo == resistenze[r].nodo2) { 
+                unidirected_edge<int> arco_r (resistenze[r].nodo1, resistenze[r].nodo2);
+                if (nodo_partenza == arco_r.from() && nodo_arrivo == arco_r.to()) { 
                     B(r, z) = +1;
                     break; 
                 }
-                else if (nodo_partenza == resistenze[r].nodo2 && nodo_arrivo == resistenze[r].nodo1) {
+                else if (nodo_partenza == arco_r.to() && nodo_arrivo == arco_r.from()) {
                     B(r, z) = -1;
                     break; 
                 }
@@ -118,7 +119,7 @@ Eigen::VectorXd costruzione_v(const std::vector<struttura>& generatori, const st
 
     Eigen::VectorXd v = Eigen::VectorXd::Zero(n);
 
-    for (int z = 0; z < cicli.size(); z++) {
+    for (size_t z = 0; z < cicli.size(); z++) {
         
         const std::vector<int>& maglia = cicli[z].nodes;
 
@@ -127,13 +128,13 @@ Eigen::VectorXd costruzione_v(const std::vector<struttura>& generatori, const st
             int nodo_arrivo = maglia[k + 1];
 
             for (int g = 0; g < generatori.size(); g++) {
-                
-                if (nodo_partenza == generatori[g].nodo1 && nodo_arrivo == generatori[g].nodo2) {
-                    v(z) -= generatori[g].value;
+                unidirected_edge<int> arco_g (generatori[g].nodo1, generatori[g].nodo2);
+                if (nodo_partenza == arco_g.from() && nodo_arrivo == arco_g.to()) {
+                    v(z) -= generatori[g].value * generatori[g].sign;
                     break;
                 }
-                else if (nodo_partenza == generatori[g].nodo2 && nodo_arrivo == generatori[g].nodo1) {
-                    v(z) += generatori[g].value;
+                else if (nodo_partenza == arco_g.to() && nodo_arrivo == arco_g.from()) {
+                    v(z) += generatori[g].value * generatori[g].sign;
                     break;
                 }
             }
@@ -141,3 +142,4 @@ Eigen::VectorXd costruzione_v(const std::vector<struttura>& generatori, const st
     }
     return v;
 }
+

@@ -1,8 +1,10 @@
+#pragma once
 #include <vector>
 #include <queue>
 #include "graphs.hpp"
-#include "contenitori.hpp" ////importare file
+#include "contenitori.hpp" 
 #include "graph_visit.hpp"
+#include "cicli_fondamentali.hpp"
 
 inline int prodotto_scalare(const std::vector<bool>& S, const std::vector<bool>& P) {
     int sum = 0;
@@ -58,13 +60,13 @@ std::vector<bool> find_minimal_cycle(const unidirected_graph<int>& G, const std:
     auto nodi = G.all_nodes();
     auto archi = G.all_edges();
     int V= *nodi.rbegin() + 1; //offset per gli indici
-    //int V_primo = 2 * V;
     int m = G.all_edges().size();
  
     unidirected_graph<int> G_primo = build_lifting_graph(G, Si);
     int INF= 1e9;
     std::vector<bool> ciclo_ottimo;
     double peso_minimo = INF;
+    int lunghezza_minima= INF; 
  
     for (int v : G.all_nodes()) {
         int target = v + V; // v-
@@ -103,7 +105,7 @@ std::vector<bool> find_minimal_cycle(const unidirected_graph<int>& G, const std:
         for (size_t i = 0; i + 1 < path.size(); ++i)
             peso += G_primo.weight(path[i], path[i + 1]);
  
-        if (peso >= peso_minimo) continue;
+        if (peso > peso_minimo) continue;
  
         std::vector<bool> C_mu(m, false);
         for (size_t i = 0; i + 1 < path.size(); ++i) {
@@ -118,16 +120,68 @@ std::vector<bool> find_minimal_cycle(const unidirected_graph<int>& G, const std:
             }
         }
  
-        peso_minimo  = peso;
-        ciclo_ottimo = C_mu;
+        int lunghezza=0;
+        for (bool b: C_mu) if (b) lunghezza++;
+        bool migliore= (peso< peso_minimo) || (peso==peso_minimo && lunghezza< lunghezza_minima);
+        if (migliore) {
+            peso_minimo= peso;
+            lunghezza_minima = lunghezza;
+            ciclo_ottimo = C_mu;
+        }
     }
     return ciclo_ottimo;
 }
 
+//funzione di conversione
+template <typename T>
+struttura_cicli<T> conversione(const unidirected_graph<T>& G, const std::vector<bool>& C) {
+    struttura_cicli<T> ciclo;
+    std::map<T, std::vector<T>> adiacenza;
+ 
+    // Ricostruisco gli archi attivi e l'adiacenza locale del ciclo
+    for (size_t idx = 0; idx < C.size(); ++idx) {
+        if (C[idx]) {
+            unidirected_edge<T> e = G.edge_at((int)idx);
+            adiacenza[e.from()].push_back(e.to());
+            adiacenza[e.to()].push_back(e.from());
+            ciclo.edges.insert(e);
+        }
+    }
+    if (adiacenza.empty()) return ciclo;  // vettore tutto a zero: ciclo vuoto
+ 
+    // Cammino lungo il ciclo (ogni nodo ha esattamente 2 vicini)
+    T start = adiacenza.begin()->first;
+    std::vector<T> path;
+    path.push_back(start);
+ 
+    T prev = start;
+    T cur  = adiacenza[start][0];
+ 
+    while (cur != start) {
+        path.push_back(cur);
+        const auto& vicini = adiacenza[cur];
+        T next = (vicini[0] == prev) ? vicini[1] : vicini[0];
+        prev = cur;
+        cur  = next;
+    }
+    path.push_back(start);  // richiude il ciclo (nodes.front() == nodes.back())
+ 
+    // Rotazione: il ciclo inizia dal nodo minimo
+    auto it = std::min_element(path.begin(), path.end() - 1);
+    std::rotate(path.begin(), it, path.end() - 1);
+    path.back() = path.front();
+ 
+
+    ciclo.nodes = path;
+    return ciclo;
+}
+
+
+
 // Funzione principale di De Pina
-std::vector<std::vector<bool>> de_pina(const unidirected_graph<int>& G, int nodo_sorgente) {
+std::vector<struttura_cicli<int>> de_pina(const unidirected_graph<int>& G, int nodo_sorgente) {
     
-    // 1. CALCOLO ALBERO E COALBERO (Usando le tue funzioni!)
+    // CALCOLO ALBERO E COALBERO (Usando le tue funzioni!)
     lifo<int> pila;
     unidirected_graph<int> T = graph_visit(G, nodo_sorgente, pila); // T = dfs(G)
     unidirected_graph<int> C = G - T;                               // C = G \ T
@@ -135,7 +189,7 @@ std::vector<std::vector<bool>> de_pina(const unidirected_graph<int>& G, int nodo
     int m = G.all_edges().size();
     int k = C.all_edges().size(); // Il numero di cicli è esattamente il numero di archi scartati
     
-    // 2. INIZIALIZZAZIONE DEI VETTORI S_i
+    // INIZIALIZZAZIONE DEI VETTORI S_i
     std::vector<std::vector<bool>> S(k, std::vector<bool>(m, false));
     int l = 0;
     for (const auto& arco_coalbero : C.all_edges()) {
@@ -144,7 +198,7 @@ std::vector<std::vector<bool>> de_pina(const unidirected_graph<int>& G, int nodo
         l++;
     }
 
-    // 3. CICLO ALGEBRICO DI DE PINA (Esattamente l'Algorithm 2 delle note)
+    // CICLO ALGEBRICO DI DE PINA 
     std::vector<std::vector<bool>> B; // Base dei cicli minimi
     
     for (int i = 0; i < k; ++i) {
@@ -158,6 +212,11 @@ std::vector<std::vector<bool>> de_pina(const unidirected_graph<int>& G, int nodo
                 S[j] = differenza_simmetrica(S[j], S[i]);
         }
     }
+    std::vector<struttura_cicli<int>> basi;
+    basi.reserve(B.size());
+    for(const auto& Ci: B){
+        basi.push_back(conversione(G, Ci));
+    }
 
-    return B;
+    return basi;
 }
