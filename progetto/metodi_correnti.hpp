@@ -7,13 +7,7 @@
 #include <Eigen/SVD>
 #include "graphs.hpp"
 #include "cicli_fondamentali.hpp"
-#include "depinanuovo.hpp"
-
-//usiamo add_edge per creare gli archi delle resistenze e generatori come mappa di vettore (nodo,nodo) e peso (valore della resistenza/del generatore)
-//POSSIBILI DOMANDE ALL'ESAME?
-//perchè usiamo una mappa? cosa comporta? c'è un modo più semplice? 
-//coontrollare i segni
-//i cicli sono in senso antiorario
+#include "DePina.hpp"
 
 struct struttura {
     std::string type;    // 'R' o 'V'
@@ -40,8 +34,8 @@ circuito lettura(const std::string& nome){
         int nodo1, nodo2;
 
         while ( ifs >> tipo>> peso >> nodo1 >> nodo2 ){
-
             //gestisco gli errori
+            
             if (nodo1==nodo2){
                 std::cerr << "ERRORE: l'arco è un loop" << std::endl ;
                 continue;

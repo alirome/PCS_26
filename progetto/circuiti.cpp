@@ -3,7 +3,7 @@
 #include <Eigen/SVD>
 #include "metodi_correnti.hpp"
 #include "graphs.hpp"
-
+#include "gradiente_coniugato.hpp"
 
 int main(){
     circuito C=lettura("../netlist.txt"); //la netlist non si trova in build/
@@ -11,32 +11,7 @@ int main(){
     unidirected_graph<int>& G=C.G;
     unidirected_edge<int> arco_sorgente= G.edge_at(0);
     std::vector<struttura_cicli<int>> cicli = cicli_fondamentali_dfs(G, arco_sorgente.from());
-    std::vector<struttura_cicli<int>> maglie = de_pina_from_scratch( G, arco_sorgente.from()); 
-    
-    //stampa maglie
-    for (size_t i = 0; i < maglie.size(); ++i) {
-        std::cout << "maglia " << i+1 << ": ";
-        for (size_t j=0; j< maglie[i].nodes.size(); ++j){
-            std::cout<< maglie[i].nodes[j];
-            if ( j+1 < maglie[i].nodes.size())
-                std::cout<< " -> ";
-        }
-        std::cout<< "\n";
-        std::cout << std::endl;
-    }
-
-
-    //stampa cicli
-    for (size_t i = 0; i < cicli.size(); ++i) {
-        std::cout<< "ciclo "<< i+1<< " : ";
-        for (size_t j=0; j< cicli[i].nodes.size(); ++j){
-            std::cout<< cicli[i].nodes[j];
-            if ( j+1 < cicli[i].nodes.size())
-                std::cout<< " -> ";
-        }
-        std::cout<< "\n";
-        std::cout << std::endl;
-    }
+    std::vector<struttura_cicli<int>> maglie = de_pina( G, arco_sorgente.from()); 
 
     //creare vettore resistori e struttura componenti
     std::vector<struttura> resistenze;
@@ -55,6 +30,8 @@ int main(){
     //creo matrice di incidenza e resistenza
     //n= numero di cicli 
     //m= numero di resitori
+    //metodo dfs = 1
+    //metodo de pina = 2
     Eigen::MatrixXd R = costruzione_R (resistenze); //resistenza mxm
     Eigen::MatrixXd B = costruzione_B (resistenze , cicli ); //incidenza mxn
     Eigen::MatrixXd B2 = costruzione_B (resistenze , maglie );
@@ -62,25 +39,35 @@ int main(){
     Eigen::VectorXd v2 = costruzione_v (generatori, maglie);
     Eigen::MatrixXd A = B.transpose() * R * B;
     Eigen::MatrixXd A2 = B2.transpose() * R * B2;
-    Eigen::VectorXd i = A.colPivHouseholderQr().solve(v); 
-    Eigen::VectorXd i2 = A2.colPivHouseholderQr().solve(v2);
+    
+    // Parametri per il Gradiente Coniugato
+    Eigen::VectorXd x0_1 = Eigen::VectorXd::Zero(v.size()); 
+    Eigen::VectorXd x0_2 = Eigen::VectorXd::Zero(v2.size()); 
+    double tolleranza = 1e-10;  
+    unsigned int iter_max = 1000; 
+
+    // Risoluzione per DFS
+    risultati ris_dfs = gradiente_coniugato(A, v, x0_1, tolleranza, iter_max);
+    Eigen::VectorXd i = ris_dfs.x;
+
+    // Risoluzione per De Pina
+    risultati ris_depina = gradiente_coniugato(A2, v2, x0_2, tolleranza, iter_max);
+    Eigen::VectorXd i2 = ris_depina.x;
+
     Eigen::VectorXd tensioni = R * B * i;
     Eigen::VectorXd correnti = B * i;
     Eigen::VectorXd tensioni2 = R * B2 * i2;
     Eigen::VectorXd correnti2 = B2 * i2;
 
-
-    std::cout << "Matrice R (Diagonale delle Resistenze):\n" << R << "\n\n";
-    std::cout << "Matrice B (Incidenza Maglie-Resistenze):\n" << B << "\n\n";
-    std::cout << "matrice B2\n" << B2 << "\n\n";
-    std::cout << "Vettore dei termini noti (v):\n" << v << "\n\n";
-    std::cout << "vettori\n" << v2 << "\n\n";
-    std::cout << "Vettore delle correnti di maglia (i):\n" << i << "\n\n";
-    std::cout << "=! correnti\n" << i2 << "\n\n";
-
+    std::cout << "\nRISULTATI CICLI FONDAMENTALI (DFS): \n";
     for (int r=0; r<resistenze.size(); r++){
-        std::cout << resistenze[r].type << ": V = " << tensioni[r] << " volts, I = " << correnti[r] << " amps.\n";
+        std::cout << resistenze[r].type << ": V = " << tensioni[r] << " volts, I = " << correnti[r] << " amps\n";
     }
+    std::cout << "\nRISULTATI DE PINA: \n";
+    for (int r=0; r<resistenze.size(); r++){
+        std::cout << resistenze[r].type << ": V = " << tensioni2[r] << " volts, I = " << correnti2[r] << " amps\n";
+    }
+    std::cout << "\n";
 
     return 0;
 }
